@@ -34,9 +34,12 @@
           docker = dockerImage;
         };
         defaultPackage = dockerImage;
-        devShell = pkgs.mkShell {
+        devShell = (pkgs.mkShell.override { stdenv = pkgs.llvmPackages_14.stdenv; }) {
+          LIBCLANG_PATH = "${pkgs.llvmPackages_14.libclang.lib}/lib";
           buildInputs =
-            [ pkgs.pkg-config pkgs.openssl (rustVersion.override { extensions = [ "rust-src" ]; }) ];
+            [ pkgs.pkg-config 
+              pkgs.openssl 
+              (rustVersion.override { extensions = [ "rust-src" ]; }) ];
         };
       });
 }
